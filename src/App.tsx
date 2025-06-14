@@ -1,6 +1,8 @@
+import "./global.css"
+
 const App = () => {
   return (
-    <div>App</div>
+    <div className="text-2xl text-red-500">App</div>
   )
 }
 
