@@ -2,7 +2,9 @@ import "./global.css"
 
 const App = () => {
   return (
-    <div className="text-2xl text-red-500">App</div>
+    <h1 className="text-3xl font-bold underline">
+      Hello Snapgram!
+    </h1>
   )
 }
 
