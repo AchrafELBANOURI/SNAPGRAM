@@ -6,12 +6,15 @@
 
 @layer base {
   * {
-    @apply box-border list-none p-0 m-0 scroll-smooth;
+    box-sizing: border-box;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-dark-1 text-white min-h-screen;
-    font-family: 'Inter', sans-serif;
+    @apply bg-dark-1 text-white min-h-screen font-inter;
   }
 }
 
