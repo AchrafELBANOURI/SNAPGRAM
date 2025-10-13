@@ -14,15 +14,17 @@ import { Input } from "@/components/ui/input"
 import { SignUpValidation } from "@/lib/validation"
 import z from "zod"
 import Loader from "@/components/shared/Loader"
-import { Link } from "react-router-dom"
+import { Link , useNavigate } from "react-router-dom"
 import { useToast } from "@/hooks/use-toast"
 import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations"
+import { useUserContext } from "@/context/AuthContext"
 
 
 
 const SignUpForm = () => {
   const { toast } = useToast();
-  const isLoading = true;
+  const { checkAuthUser , isLoading : isUserLoading } = useUserContext();
+  const navigate = useNavigate();
   
   const { 
     mutateAsync : createUserAccount , 
@@ -66,8 +68,16 @@ const SignUpForm = () => {
       return toast({title : "Sign in failed. Please try again."})
     }
 
-    console.log(newUser);
+    const isLoggedIn = await checkAuthUser() ;  
+
+    if(isLoggedIn){
+      form.reset();
+      navigate('/');
+    }else{
+      return toast({title : "Sign up failed. Please try again."});
+    }
   }
+
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
@@ -130,7 +140,7 @@ const SignUpForm = () => {
             )}
           />
           <Button type="submit" className="shad-button_primary">
-            { isLoading ? (
+            { isCreatingAccount ? (
               <div className="flex-center gap-2">
                 <Loader />
               </div>
