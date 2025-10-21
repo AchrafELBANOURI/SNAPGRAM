@@ -1,3 +1,4 @@
+import type { Models } from "appwrite";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 

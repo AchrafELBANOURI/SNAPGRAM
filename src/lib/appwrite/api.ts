@@ -1,6 +1,6 @@
 import type { INewPost, INewUser } from "@/types";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
-import { ID, ImageGravity, Query } from "appwrite";
+import { ID, Query } from "appwrite";
 
 export async function createUserAccount( user : INewUser  ) {
     try {
@@ -156,13 +156,9 @@ export async function uploadFile(file: File) {
 // ============================== GET FILE URL
 export function getFilePreview(fileId: string) {
   try {
-    const fileUrl = storage.getFilePreview(
+    const fileUrl = storage.getFileView(
       appwriteConfig.storageId,
-      fileId,
-      2000,
-      2000,
-      ImageGravity.Top,
-      100
+      fileId
     );
 
     if (!fileUrl) throw Error;
@@ -188,10 +184,126 @@ export async function loadPosts(){
   const posts = await databases.listDocuments(
     appwriteConfig.databaseId ,
     appwriteConfig.postCollectionId ,
-    [Query.orderDesc('$createdAt') , Query.limit(20)]
+    [Query.orderDesc('$createdAt') , Query.limit(20) , Query.select(['*'])]
   )
 
   if (!posts) throw Error ;
 
   return posts ;
+}
+
+export async function likePost( postId : string , userId : string ){
+  try {
+    if(!postId || !userId) throw Error
+  
+    const updatedPost = await databases.createDocument(
+      appwriteConfig.databaseId ,
+      appwriteConfig.likesCollectionId , 
+      ID.unique() ,
+      {
+        user: userId , 
+        post: postId
+      }
+    )
+
+    if( !updatedPost ) throw Error ;
+
+    return updatedPost;
+  } catch (error) {
+    console.log(error);
+    return ;
+  }
+}
+
+export async function removeLikeFromPost( likedPostId : string ){
+  try {
+    const removedLikedPost = await databases.deleteDocument(
+      appwriteConfig.databaseId ,
+      appwriteConfig.likesCollectionId , 
+      likedPostId
+    )
+
+    if( !removedLikedPost ) throw Error ;
+
+    return { status : 'ok'};
+  } catch (error) {
+    console.log(error);
+  } 
+}
+
+export async function savePost( postId : string , userId : string ){
+ try {
+
+    const savedPost = await databases.createDocument(
+      appwriteConfig.databaseId ,
+      appwriteConfig.savesCollectionId ,
+      ID.unique() ,
+      {
+        user: userId ,
+        post: postId
+      }
+    )
+
+    if( !savedPost ) throw Error ;
+
+    return savedPost;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function unsavePost( savedPostId : string ){
+  try {
+    const savedPost = await databases.deleteDocument(
+      appwriteConfig.databaseId ,
+      appwriteConfig.savesCollectionId ,
+      savedPostId
+    )
+
+    if( !savedPost ) throw Error ;
+
+    return { status : 'ok' };
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export async function getPostLikes( postId : string ){
+  try {
+    const likes = await databases.listDocuments(
+      appwriteConfig.databaseId , 
+      appwriteConfig.likesCollectionId ,
+      [
+        Query.equal('post.$id' , postId),
+      ]
+    )
+
+    if(!likes) throw Error ; 
+    
+    return likes.documents ;
+    
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function getUserPostSaves ( userId : string ){
+  try {
+    const saves = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      [
+        Query.equal('user.$id',userId),
+      ]
+    )
+
+    if(!saves) throw Error ; 
+
+    return saves.documents ;
+
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
 }
