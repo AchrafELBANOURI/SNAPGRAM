@@ -5,9 +5,10 @@ export const QUERY_KEYS = {
   // USER KEYS
   GET_CURRENT_USER: "getCurrentUser",
   GET_USERS: "getUsers",
+  GET_INFINITE_USERS : "getInfiniteUsers",
   GET_USER_BY_ID: "getUserById",
   GET_USER_POST_SAVES : "getUserPostSaves",
-
+  
   // POST KEYS
   GET_POSTS: "getPosts",
   GET_INFINITE_POSTS: "getInfinitePosts",
@@ -16,7 +17,8 @@ export const QUERY_KEYS = {
   GET_USER_POSTS: "getUserPosts",
   GET_POST_LIKES : "getPostLikes",
   GET_FILE_PREVIEW: "getFilePreview",
-
+  
   //  SEARCH KEYS
   SEARCH_POSTS: "getSearchPosts",
+  SEARCH_USERS : "getSearchUsers",
 } as const;

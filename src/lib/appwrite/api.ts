@@ -495,3 +495,55 @@ export async function searchPosts(searchTerm : string){
     console.log(error);
   }
 }
+
+export async function searchUsers(searchTerm: string) {
+  try {
+    const queries = [];
+    
+    if (searchTerm) {
+      // Use Query.search for fulltext search
+      queries.push(Query.search("name", searchTerm));
+      // You can add username search as well since you indexed it
+      // queries.push(Query.search("username", searchTerm));
+    } else {
+      // If no search term, just get all users with a limit
+      queries.push(Query.limit(20));
+    }
+    
+    const users = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      queries
+    );
+
+    if (!users) throw Error;
+
+    return users.documents;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function getInfiniteUsers( {pageParam} : {pageParam : number}){
+  const queries : any[] = [Query.orderDesc('name'),Query.limit(20)];
+
+  if(pageParam){
+    queries.push(Query.cursorAfter(pageParam.toString()));
+  }
+
+  try {
+    const users = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.userCollectionId,
+      queries
+    )
+
+    if(!users) throw Error ;
+
+    return users ;
+  } catch (error) {
+    console.log(error);
+    return ;
+  }
+}
