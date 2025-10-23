@@ -2,7 +2,7 @@ import type { Models } from "appwrite";
 import RelatedPost from "./RelatedPost";
 
 type GridPostListProps = {
-  posts: Models.DefaultDocument[] ;
+  posts?: Models.DefaultDocument[] ;
   showUser?: boolean;
   showStats?: boolean;
 };
@@ -15,7 +15,7 @@ const GridPostList = ({
 
   return (
     <ul className="grid-container">
-      {posts.map((post : Models.DefaultDocument) => (
+      {posts?.map((post : Models.DefaultDocument) => (
         <RelatedPost 
           post={post} 
           showUser={showUser} 
