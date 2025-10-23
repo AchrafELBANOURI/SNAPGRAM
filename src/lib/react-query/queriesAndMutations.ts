@@ -120,7 +120,7 @@ export const useUnsavePost = () => {
     const queryClient = useQueryClient();
     
     return useMutation({
-        mutationFn : ( savedPostId : string ) => unsavePost( savedPostId ),
+        mutationFn : ( {postId , userId} : {postId : string , userId : string} ) => unsavePost(postId , userId),
         onSuccess : () => {
             queryClient.invalidateQueries({
                 queryKey : [QUERY_KEYS.GET_RECENT_POSTS]

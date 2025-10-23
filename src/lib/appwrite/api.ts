@@ -346,19 +346,33 @@ export async function savePost( postId : string , userId : string ){
   }
 }
 
-export async function unsavePost( savedPostId : string ){
+export async function unsavePost(postId: string, userId: string) {
   try {
+    // Find the saved post document first
+    const savedPosts = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      [
+        Query.equal('post', [postId]),
+        Query.equal('user', [userId])
+      ]
+    );
+
+    if (!savedPosts || savedPosts.documents.length === 0) throw Error;
+
+    // Now delete the found document
     const savedPost = await databases.deleteDocument(
-      appwriteConfig.databaseId ,
-      appwriteConfig.savesCollectionId ,
-      savedPostId
-    )
+      appwriteConfig.databaseId,
+      appwriteConfig.savesCollectionId,
+      savedPosts.documents[0].$id
+    );
 
-    if( !savedPost ) throw Error ;
+    if (!savedPost) throw Error;
 
-    return { status : 'ok' };
+    return { status: 'ok' };
   } catch (error) {
     console.log(error);
+    return error;
   }
 }
 
@@ -382,20 +396,28 @@ export async function getPostLikes( postId : string ){
   }
 }
 
-export async function getUserPostSaves ( userId : string ){
+export async function getUserPostSaves(userId: string) {
   try {
+    // First get all save records for this user
     const saves = await databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.savesCollectionId,
-      [
-        Query.equal('user.$id',userId),
-      ]
-    )
+      [Query.equal('user', [userId])]
+    );
 
-    if(!saves) throw Error ; 
+    // Then get the whole post object from those saves
+    const savedPosts = await Promise.all(
+      saves.documents.map(async (save) => {
+        const post = await databases.getDocument(
+          appwriteConfig.databaseId,
+          appwriteConfig.postCollectionId,
+          save.post
+        );
+        return post;
+      })
+    );
 
-    return saves.documents ;
-
+    return savedPosts.filter(Boolean);
   } catch (error) {
     console.log(error);
     return [];

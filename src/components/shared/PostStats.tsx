@@ -82,12 +82,12 @@ const PostStats = ( { post , userId } : PostStatsProps) => {
             const result = await refetchGetUserPostSaves();
             
             const savedPosts = result.data?.find(
-                (record : Models.DefaultDocument) => record.post === post?.$id
+                (record : Models.DefaultDocument) => record.$id === post?.$id
             );
 
             if(savedPosts){
                 setIsSaved(false);
-                unsavePost(savedPosts.$id);
+                unsavePost({postId : post?.$id || '', userId : userId});
 
                 refetchGetUserPostSaves();
             } else {
@@ -125,7 +125,7 @@ const PostStats = ( { post , userId } : PostStatsProps) => {
     useEffect(() => {
         if (userPostSaves) {
             const userHasSaved = userPostSaves?.some(
-                (record: Models.DefaultDocument) => record.post === post?.$id
+                (record: Models.DefaultDocument) => record.$id === post?.$id
             );
             
             setIsSaved(!!userHasSaved);
