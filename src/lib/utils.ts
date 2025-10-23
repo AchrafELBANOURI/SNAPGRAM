@@ -1,4 +1,3 @@
-import type { Models } from "appwrite";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -8,7 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 
 export const convertFileToUrl = (file: File) => URL.createObjectURL(file);
 
-export function formatDateString(dateString: string) {
+export function formatDateString(dateString: string = "") {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "short",

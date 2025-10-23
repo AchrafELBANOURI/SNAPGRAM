@@ -1,11 +1,11 @@
-import { useGetCurrentUser, useGetPostLikes, useGetUserPostSaves, useLikePost, useRemoveLikeFromPost, useSavePost, useUnsavePost } from '@/lib/react-query/queriesAndMutations';
+import { useGetPostLikes, useGetUserPostSaves, useLikePost, useRemoveLikeFromPost, useSavePost, useUnsavePost } from '@/lib/react-query/queriesAndMutations';
 import type { Models } from 'appwrite'
 import { Loader } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 
 
 type PostStatsProps = {
-    post : Models.DefaultDocument ;
+    post? : Models.DefaultDocument ;
     userId : string ;
 }
 
@@ -24,7 +24,7 @@ const PostStats = ( { post , userId } : PostStatsProps) => {
     const { mutate : unsavePost , isPending : isUnsavingPost } = useUnsavePost();
     
     // Queries
-    const { data : postLikes , refetch : refetchGetPostLikes } = useGetPostLikes( post.$id );
+    const { data : postLikes , refetch : refetchGetPostLikes } = useGetPostLikes( post?.$id || '' );
     const { data : userPostSaves , refetch : refetchGetUserPostSaves } = useGetUserPostSaves( userId );
 
     // Handle Like Click A Post
@@ -52,7 +52,7 @@ const PostStats = ( { post , userId } : PostStatsProps) => {
             } else {
                 // Like - create new like document
                 likePost(
-                    { postId: post.$id, userId: userId },
+                    { postId: post?.$id || '' , userId: userId },
                     {
                         onSuccess : () => {
                             refetchGetPostLikes();
@@ -82,7 +82,7 @@ const PostStats = ( { post , userId } : PostStatsProps) => {
             const result = await refetchGetUserPostSaves();
             
             const savedPosts = result.data?.find(
-                (record : Models.DefaultDocument) => record.post === post.$id 
+                (record : Models.DefaultDocument) => record.post === post?.$id
             );
 
             if(savedPosts){
@@ -92,7 +92,7 @@ const PostStats = ( { post , userId } : PostStatsProps) => {
                 refetchGetUserPostSaves();
             } else {
                 savePost(
-                    { postId : post.$id , userId : userId },
+                    { postId : post?.$id || '' , userId : userId },
                     {
                         onSuccess : () => {
                             refetchGetUserPostSaves();
@@ -125,12 +125,12 @@ const PostStats = ( { post , userId } : PostStatsProps) => {
     useEffect(() => {
         if (userPostSaves) {
             const userHasSaved = userPostSaves?.some(
-                (record: Models.DefaultDocument) => record.post === post.$id
+                (record: Models.DefaultDocument) => record.post === post?.$id
             );
             
             setIsSaved(!!userHasSaved);
         }
-    }, [userPostSaves,post.$id]);
+    }, [userPostSaves,post?.$id]);
 
   return (
     <div className='flex justify-between items-center z-20'>
