@@ -8,6 +8,7 @@ export const QUERY_KEYS = {
   GET_INFINITE_USERS : "getInfiniteUsers",
   GET_USER_BY_ID: "getUserById",
   GET_USER_POST_SAVES : "getUserPostSaves",
+  GET_USER_LIKED_POSTS : "getUserLikedPosts",
   
   // POST KEYS
   GET_POSTS: "getPosts",

@@ -3,6 +3,7 @@ import { formatDateString } from '@/lib/utils'
 import type { Models } from 'appwrite'
 import { Link } from 'react-router-dom'
 import PostStats from './PostStats'
+import { useGetUser, useGetUserPosts } from '@/lib/react-query/queriesAndMutations'
 
 type PostCardProps = {
     post : Models.DefaultDocument
@@ -10,6 +11,7 @@ type PostCardProps = {
 
 const PostCard = ( {post} : PostCardProps ) => {
   const { user } = useUserContext() ;
+  const { data : postOwner } = useGetUser(post?.creator);
 
   if( !post.creator ) return ;
 
@@ -17,9 +19,9 @@ const PostCard = ( {post} : PostCardProps ) => {
     <div className='post-card'>
         <div className='flex-between'>
             <div className='flex items-center gap-3'>
-                <Link to={`profile/${post.creator.$id}}`}>
+                <Link to={`profile/${post?.creator}}`}>
                     <img
-                        src={post?.creator?.imageUrl || "/assets/icons/profile-placeholder.svg"}
+                        src={postOwner?.imageUrl || "/assets/icons/profile-placeholder.svg"}
                         alt="profile"
                         className='w-12 lg:h-12 rounded-full' 
                     />
@@ -27,7 +29,7 @@ const PostCard = ( {post} : PostCardProps ) => {
 
                 <div className="flex flex-col">
                     <p className='base-medium lg:body-bold text-light-1'>
-                        {post.creator.name}
+                        {postOwner?.name}
                     </p>
                     <div className='flex-center gap-2 text-light-3'>
                         <p className='subtle-semibold lg:small-regular'>

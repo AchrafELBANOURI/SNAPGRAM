@@ -4,8 +4,8 @@ import {
     useQuery, 
     useQueryClient 
 } from '@tanstack/react-query'
-import { createPost, createUserAccount, deletePost, editPost, getCurrentUser, getInfinitePosts, getInfiniteUsers, getPostById, getPostLikes, getUserById, getUserPosts, getUserPostSaves, likePost, loadPosts, removeLikeFromPost, savePost, searchPosts, searchUsers, SignInAccount, signOutAccount, unsavePost } from '../appwrite/api'
-import type { INewPost, INewUser, IUpdatePost } from '@/types'
+import { createPost, createUserAccount, deletePost, editPost, getCurrentUser, getInfinitePosts, getInfiniteUsers, getPostById, getPostLikes, getUserById, getUserLikedPosts, getUserPosts, getUserPostSaves, likePost, loadPosts, removeLikeFromPost, savePost, searchPosts, searchUsers, SignInAccount, signOutAccount, unsavePost, updateUser } from '../appwrite/api'
+import type { INewPost, INewUser, IUpdatePost, IUpdateUser } from '@/types'
 import { QUERY_KEYS } from './queryKeys'
 
 export const useCreateUserAccount = () => {
@@ -254,3 +254,26 @@ export const useSearchUser = ( searchTerm : string ) => {
         enabled : !!searchTerm
     })
 }
+
+export const useGetUserLikedPosts = ( userId : string ) => {
+    return useQuery({
+        queryKey : [QUERY_KEYS.GET_USER_LIKED_POSTS,userId],
+        queryFn : () => getUserLikedPosts(userId),
+        enabled : !!userId,
+    })
+}
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (user: IUpdateUser) => updateUser(user),
+    onSuccess: (data) => {
+        queryClient.invalidateQueries({
+          queryKey: [QUERY_KEYS.GET_USER_BY_ID, data?.$id],
+        });
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_CURRENT_USER],
+      });
+    },
+  });
+};
