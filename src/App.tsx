@@ -1,13 +1,22 @@
 import "./global.css";
-import { Routes , Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import SignInForm from "./_auth/forms/SignInForm";
 import SignUpForm from "./_auth/forms/SignUpForm";
-import { AllUsers, CreatePost, EditPost, Explore, Home, PostDetails, Profile, Saved, UpdateProfile } from "./_root/pages";
+import {
+  AllUsers,
+  CreatePost,
+  EditPost,
+  Explore,
+  Home,
+  PostDetails,
+  Profile,
+  Saved,
+  UpdateProfile,
+} from "./_root/pages";
 import AuthLayout from "./_auth/AuthLayout";
 import RootLayout from "./_root/RootLayout";
 import { Toaster } from "./components/ui/toaster";
-
 
 const App = () => {
   return (
@@ -18,7 +27,7 @@ const App = () => {
           <Route path="/sign-in" element={<SignInForm />}></Route>
           <Route path="/sign-up" element={<SignUpForm />}></Route>
         </Route>
- 
+
         {/* private routes */}
         <Route element={<RootLayout />}>
           <Route index element={<Home />}></Route>
@@ -31,13 +40,11 @@ const App = () => {
           <Route path="/profile/:id/*" element={<Profile />} />
           <Route path="/update-profile/:id" element={<UpdateProfile />} />
         </Route>
-
       </Routes>
 
       <Toaster />
-
     </main>
-  )
-}
+  );
+};
 
 export default App;

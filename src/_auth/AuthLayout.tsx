@@ -1,7 +1,5 @@
-import { Outlet , Navigate } from "react-router-dom"
-import React from 'react'
-import SignInForm from "./forms/SignInForm";
-import SignUpForm from "./forms/SignUpForm";
+import { Outlet , Navigate } from "react-router-dom";
+import React from 'react';
 
 const AuthLayout = () => {
   const isAuthenticated = false ;
