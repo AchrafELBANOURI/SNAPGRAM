@@ -1,54 +1,82 @@
-# React + TypeScript + Vite
+# Snapgram
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![Snapgram application preview](./public/assets/snapgram.png)
 
-Currently, two official plugins are available:
+Snapgram is a modern social media application for sharing photos, discovering
+new content, and connecting with other users. It provides an intuitive,
+responsive experience for creating and managing posts, interacting with the
+community, and customizing user profiles.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Create, edit, and delete image posts
+- Explore posts and discover other users
+- Like and save posts for later
+- View post details and related content
+- Follow user activity through profiles
+- Update profile information and profile images
+- Responsive layouts for desktop and mobile screens
+- Authentication and data storage powered by Appwrite
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech stack
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- React Router
+- TanStack React Query
+- Appwrite
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Getting started
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Prerequisites
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+- Node.js 18 or newer
+- An Appwrite project with authentication, database, and storage configured
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/AchrafELBANOURI/SNAPGRAM.git
+   cd SNAPGRAM
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   npm install
+   ```
+
+3. Create a `.env.local` file in the project root and configure the Appwrite
+   values used by the application:
+
+   ```env
+   VITE_APPWRITE_URL=
+   VITE_APPWRITE_PROJECT_ID=
+   VITE_APPWRITE_DATABASE_ID=
+   VITE_APPWRITE_STORAGE_ID=
+   VITE_APPWRITE_USER_COLLECTION_ID=
+   VITE_APPWRITE_POST_COLLECTION_ID=
+   VITE_APPWRITE_SAVES_COLLECTION_ID=
+   VITE_APPWRITE_LIKES_COLLECTION_ID=
+   ```
+
+4. Start the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+The application will be available at the local URL printed by Vite.
+
+## Available scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the Vite development server |
+| `npm run build` | Type-check and build for production |
+| `npm run lint` | Run ESLint |
+| `npm run preview` | Preview the production build locally |
